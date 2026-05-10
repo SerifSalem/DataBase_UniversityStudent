@@ -1,3 +1,5 @@
+package StudentApp
+
 class Student(val id: String, var name: String, var course: String, markIn: Int) {
 
     var mark = 0

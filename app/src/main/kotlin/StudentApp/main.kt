@@ -1,3 +1,21 @@
+package org.example.app
+
+import StudentApp.*
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+
+// Step 3: This object defines the database table structure using Exposed.
+// It represents the "students" table in SQLite.
+object Students : Table("students") {
+    val id = integer("id").autoIncrement()
+    val name = varchar("name", 100)
+    val course = varchar("course", 100)
+    val mark = integer("mark")
+    override val primaryKey = PrimaryKey(id)
+}
+
 fun displayMenu() {
     println("1: Add student")
     println("2: Search for student by ID")
@@ -6,6 +24,15 @@ fun displayMenu() {
 }
 
 fun main() {
+
+    // Step 3: Connects the Kotlin application to the SQLite database file.
+    // If university.db does not exist, SQLite will create it.
+    Database.connect(url = "jdbc:sqlite:university.db", driver = "org.sqlite.JDBC")
+
+    // SchemaUtils.create creates the Students table if it does not already exist.
+    transaction { SchemaUtils.create(Students) }
+
+    // ORIGINAL CODE:
     val university = University()
     var running = true
 

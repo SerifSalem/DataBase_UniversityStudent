@@ -1,3 +1,5 @@
+package StudentApp
+
 class University {
     val studentList = mutableListOf<Student>()
 
