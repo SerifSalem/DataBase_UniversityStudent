@@ -22,4 +22,4 @@ plugins {
 include(":app")
 include(":utils")
 
-rootProject.name = "QHO543_W10_University"
+rootProject.name = "DataBase_UniversityStudent"
