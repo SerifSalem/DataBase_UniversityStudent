@@ -5,6 +5,7 @@ import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.insert
 
 // Step 3: This object defines the database table structure using Exposed.
 // It represents the "students" table in SQLite.
@@ -14,6 +15,15 @@ object Students : Table("students") {
     val course = varchar("course", 100)
     val mark = integer("mark")
     override val primaryKey = PrimaryKey(id)
+}
+
+// Task 4 Helper fuction to add student to the DB.
+fun addStudent(name: String, course: String, mark: Int): Int {
+    return Students.insert {
+        it[Students.name] = name
+        it[Students.course] = course
+        it[Students.mark] = mark
+    }[Students.id]
 }
 
 fun displayMenu() {
@@ -49,14 +59,20 @@ fun main() {
                 println("Enter course:")
                 val course = readln()
 
-                println("Enter id:")
-                val id = readln()
+                // XXprintln("Enter id:")
+                // XXval id = readln()
 
                 println("Enter mark:")
                 val mark = readln().toInt()
 
-                val student = Student(id, name, course, mark)
-                university.addStudent(student)
+                // XXval student = Student(id, name, course, mark)
+                // XXuniversity.addStudent(student)
+
+                // Task 4: insert a student in the database.
+                transaction {
+                    val newId = addStudent(name, course, mark)
+                    println("Student added with ID: $newId")
+                }
             }
 
             "2" -> {
