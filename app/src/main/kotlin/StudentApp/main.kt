@@ -6,6 +6,8 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.selectAll
 
 // Step 3: This object defines the database table structure using Exposed.
 // It represents the "students" table in SQLite.
@@ -17,13 +19,35 @@ object Students : Table("students") {
     override val primaryKey = PrimaryKey(id)
 }
 
-// Task 4 Helper fuction to add student to the DB.
+// Task 4: Helper function to add student to the DB.
 fun addStudent(name: String, course: String, mark: Int): Int {
     return Students.insert {
         it[Students.name] = name
         it[Students.course] = course
         it[Students.mark] = mark
     }[Students.id]
+}
+
+// Task 5: Helper Function to search student by Course
+fun findStudentsByCourse(course: String): List<Student> {
+
+    val matches = mutableListOf<Student>()
+
+    val results = Students.selectAll()
+        .where { Students.course eq course }
+
+    for (row in results) {
+        val student = Student(
+            row[Students.id].toString(),
+            row[Students.name],
+            row[Students.course],
+            row[Students.mark]
+        )
+
+        matches.add(student)
+    }
+
+    return matches
 }
 
 fun displayMenu() {
@@ -92,13 +116,18 @@ fun main() {
                 println("Enter course:")
                 val course = readln()
 
-                val matchingStudents = university.findStudentsByCourse(course)
+                // XXval matchingStudents = university.findStudentsByCourse(course)
 
-                if (matchingStudents.isEmpty()) {
-                    println("No students found")
-                } else {
-                    for (student in matchingStudents) {
-                        println(student)
+                // Task 5: Serach Student By Course
+                transaction {
+                    val matchingStudents = findStudentsByCourse(course)
+
+                    if (matchingStudents.isEmpty()) {
+                        println("No students found")
+                    } else {
+                        for (student in matchingStudents) {
+                            println(student)
+                        }
                     }
                 }
             }
