@@ -51,7 +51,6 @@ fun findStudentsByCourse(course: String): List<Student> {
 }
 
 // Step 6: Helper Function to search student by ID
-
 fun findStudentById(id: Int): Student? {
 
     val row = Students
