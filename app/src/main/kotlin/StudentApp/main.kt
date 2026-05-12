@@ -19,7 +19,7 @@ object Students : Table("students") {
     override val primaryKey = PrimaryKey(id)
 }
 
-// Task 4: Helper function to add student to the DB.
+// Step 4: Helper function to add student to the DB.
 fun addStudent(name: String, course: String, mark: Int): Int {
     return Students.insert {
         it[Students.name] = name
@@ -28,7 +28,7 @@ fun addStudent(name: String, course: String, mark: Int): Int {
     }[Students.id]
 }
 
-// Task 5: Helper Function to search student by Course
+// Step 5: Helper Function to search student by Course
 fun findStudentsByCourse(course: String): List<Student> {
 
     val matches = mutableListOf<Student>()
@@ -92,7 +92,7 @@ fun main() {
                 // XXval student = Student(id, name, course, mark)
                 // XXuniversity.addStudent(student)
 
-                // Task 4: insert a student in the database.
+                // Step 4: insert a student in the database.
                 transaction {
                     val newId = addStudent(name, course, mark)
                     println("Student added with ID: $newId")
@@ -118,7 +118,7 @@ fun main() {
 
                 // XXval matchingStudents = university.findStudentsByCourse(course)
 
-                // Task 5: Serach Student By Course
+                // Step 5: Serach Student By Course
                 transaction {
                     val matchingStudents = findStudentsByCourse(course)
 
