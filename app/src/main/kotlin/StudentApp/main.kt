@@ -50,6 +50,27 @@ fun findStudentsByCourse(course: String): List<Student> {
     return matches
 }
 
+// Step 6: Helper Function to search student by ID
+
+fun findStudentById(id: Int): Student? {
+
+    val row = Students
+        .selectAll()
+        .where { Students.id eq id }
+        .singleOrNull()
+
+    if (row == null) {
+        return null
+    }
+
+    return Student(
+        row[Students.id].toString(),
+        row[Students.name],
+        row[Students.course],
+        row[Students.mark]
+    )
+}
+
 fun displayMenu() {
     println("1: Add student")
     println("2: Search for student by ID")
@@ -101,14 +122,19 @@ fun main() {
 
             "2" -> {
                 println("Enter ID:")
-                val id = readln()
+                val id = readln().toInt()
 
-                val student = university.findStudentById(id)
+                //X val student = university.findStudentById(id)
 
-                if (student == null) {
-                    println("No student found")
-                } else {
-                    println(student)
+                // Step 6: Serach a student by ID.
+                transaction {
+                    val student = findStudentById(id)
+
+                    if (student == null) {
+                        println("No student found")
+                    } else {
+                        println(student)
+                    }
                 }
             }
 
