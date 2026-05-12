@@ -17,7 +17,7 @@ object Students : Table("students") {
     override val primaryKey = PrimaryKey(id)
 }
 
-// Task 4 Helper fuction to add student to the DB.
+// Step 4 Helper fuction to add student to the DB.
 fun addStudent(name: String, course: String, mark: Int): Int {
     return Students.insert {
         it[Students.name] = name
@@ -68,7 +68,7 @@ fun main() {
                 // XXval student = Student(id, name, course, mark)
                 // XXuniversity.addStudent(student)
 
-                // Task 4: insert a student in the database.
+                // Step 4: insert a student in the database.
                 transaction {
                     val newId = addStudent(name, course, mark)
                     println("Student added with ID: $newId")
@@ -113,3 +113,4 @@ fun main() {
         }
     }
 }
+
