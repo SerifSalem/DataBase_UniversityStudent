@@ -1,4 +1,4 @@
-package org.example.app
+package StudentApp
 
 import StudentApp.*
 import org.jetbrains.exposed.v1.core.Table
