@@ -7,6 +7,7 @@ import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 
 // Step 3: This object defines the database table structure using Exposed.
@@ -70,11 +71,21 @@ fun findStudentById(id: Int): Student? {
     )
 }
 
+// Step 7 — Delete Student by ID
+fun deleteStudentById(id: Int): Int {
+
+    return Students.deleteWhere {
+        Students.id eq id
+    }
+}
+
 fun displayMenu() {
     println("1: Add student")
     println("2: Search for student by ID")
     println("3: Search for students by course")
-    println("4: Quit")
+    // Step 7 — Delete Student by ID
+    println("4: Delete student by ID")
+    println("5: Quit")
 }
 
 fun main() {
@@ -157,7 +168,25 @@ fun main() {
                 }
             }
 
+            // Step 7 — Delete Student by ID
             "4" -> {
+
+                println("Enter ID:")
+                val id = readln().toInt()
+
+                transaction {
+
+                    val deleted = deleteStudentById(id)
+
+                    if (deleted == 0) {
+                        println("No student found")
+                    } else {
+                        println("Student deleted")
+                    }
+                }
+            }
+
+            "5" -> {
                 running = false
             }
 
