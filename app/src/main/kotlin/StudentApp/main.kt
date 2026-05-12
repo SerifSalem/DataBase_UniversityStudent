@@ -9,6 +9,7 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.update
 
 // Step 3: This object defines the database table structure using Exposed.
 // It represents the "students" table in SQLite.
@@ -79,13 +80,33 @@ fun deleteStudentById(id: Int): Int {
     }
 }
 
+// Step 8 — Edit Student Details
+fun updateStudent(
+    id: Int,
+    name: String,
+    course: String,
+    mark: Int
+): Int {
+
+    return Students.update(
+        { Students.id eq id }
+    ) {
+
+        it[Students.name] = name
+        it[Students.course] = course
+        it[Students.mark] = mark
+    }
+}
+
 fun displayMenu() {
     println("1: Add student")
     println("2: Search for student by ID")
     println("3: Search for students by course")
     // Step 7 — Delete Student by ID
     println("4: Delete student by ID")
-    println("5: Quit")
+    // Step 8 — Edit Student Details
+    println("5: Edit student details")
+    println("6: Quit")
 }
 
 fun main() {
@@ -186,7 +207,39 @@ fun main() {
                 }
             }
 
+            // Step 8 — Edit Student Details
             "5" -> {
+
+                println("Enter ID:")
+                val id = readln().toInt()
+
+                println("Enter new name:")
+                val name = readln()
+
+                println("Enter new course:")
+                val course = readln()
+
+                println("Enter new mark:")
+                val mark = readln().toInt()
+
+                transaction {
+
+                    val updated = updateStudent(
+                        id,
+                        name,
+                        course,
+                        mark
+                    )
+
+                    if (updated == 0) {
+                        println("No student found")
+                    } else {
+                        println("Student updated")
+                    }
+                }
+            }
+
+            "6" -> {
                 running = false
             }
 
